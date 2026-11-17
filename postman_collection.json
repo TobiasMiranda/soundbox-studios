@@ -1,0 +1,222 @@
+{
+  "info": {
+    "name": "SoundBox Studios API - Colección Oficial",
+    "_postman_id": "soundbox-api-collection-v1",
+    "description": "Colección completa de pruebas de endpoints para SoundBox Studios (Generación T - Bootcamp IA-First). Incluye validaciones de negocio, buffer técnico de 15 minutos, liquidación de cancelaciones y visualización timeline.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "reservationCode",
+      "value": "SB-8821",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "02. Listar Todas las Salas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/rooms",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rooms"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "03. Consultar Disponibilidad de Sala con Buffer",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/rooms/room-electric/availability?date=2026-11-20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rooms", "room-electric", "availability"],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-11-20"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "04. Listar Equipamiento Compartido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/equipment",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "equipment"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "05. Cotizar Reserva (Off-Peak / Descuento 20%)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roomId\": \"room-electric\",\n  \"date\": \"2026-11-25\",\n  \"startTime\": \"14:00\",\n  \"endTime\": \"16:00\",\n  \"attendeesCount\": 4,\n  \"selectedEquipment\": [\n    {\n      \"equipmentId\": \"eq-shure-sm7b\",\n      \"quantity\": 1\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/reservations/quote",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reservations", "quote"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "06. Crear Reserva Exitosa",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roomId\": \"room-abbey\",\n  \"clientName\": \"Gustavo Cerati\",\n  \"clientEmail\": \"cerati@soda.com\",\n  \"clientPhone\": \"+54 11 9999 8888\",\n  \"bandName\": \"Soda Stereo\",\n  \"attendeesCount\": 3,\n  \"date\": \"2026-11-28\",\n  \"startTime\": \"16:00\",\n  \"endTime\": \"18:00\",\n  \"selectedEquipment\": [\n    {\n      \"equipmentId\": \"eq-shure-sm7b\",\n      \"quantity\": 1\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/reservations",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reservations"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "07. Rechazo por Colisión de Buffer Técnico (15 min)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roomId\": \"room-electric\",\n  \"clientName\": \"Intruso Horario\",\n  \"clientEmail\": \"error@test.com\",\n  \"bandName\": \"Banda Error\",\n  \"attendeesCount\": 4,\n  \"date\": \"2026-11-20\",\n  \"startTime\": \"20:00\",\n  \"endTime\": \"22:00\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/reservations",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reservations"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "08. Consultar Reserva por Código",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/reservations/{{reservationCode}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reservations", "{{reservationCode}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "09. Check-in Presencial",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"simulatedTime\": \"2026-11-20T17:55:00.000Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/reservations/{{reservationCode}}/check-in",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reservations", "{{reservationCode}}", "check-in"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Cancelación y Liquidación de Seña Escalonada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Reprogramación por lluvia\",\n  \"simulatedTime\": \"2026-11-17T18:00:00.000Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/reservations/{{reservationCode}}/cancel",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reservations", "{{reservationCode}}", "cancel"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Timeline Admin con Buffer Visible",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/timeline?date=2026-11-20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin", "timeline"],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-11-20"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
