@@ -8,6 +8,9 @@ export const TECHNICAL_BUFFER_MINUTES = 15;
  */
 export function timeStringToMinutes(timeStr: string): number {
   const [hours, minutes] = timeStr.split(':').map(Number);
+  if (hours === 24 && minutes === 0) {
+    return 1440;
+  }
   if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
     throw new Error(`Formato de hora inválido: "${timeStr}". Debe ser HH:mm.`);
   }
